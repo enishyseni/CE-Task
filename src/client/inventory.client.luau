@@ -1,29 +1,47 @@
 print("Hello world, from client - Inventory!")
--- local playerGui = game.Players.LocalPlayer.WaitForChild("PlayerGui")
--- local Roact = require(game.ReplicatedStorage.Roact)
+local Roact = require(game.ReplicatedStorage.Roact)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local FoodItemCollected = ReplicatedStorage:WaitForChild("FoodItemCollected")
 
--- local InventoryComponent = Roact.Component:extend("InventoryComponent")
+local FoodDisplay = Roact.Component:extend("FoodDisplay")
 
--- function Interface(props)
+function FoodDisplay:init()
+    self.state = {
+        foodItems = {} -- Initially empty
+    }
 
--- function InventoryComponent:init()
---     self.state = {
---         items = {}, -- Initial inventory items
---     }
--- end
+    -- Listen for food item collection events
+    FoodItemCollected.OnClientEvent:Connect(function(foodItemId)
+        local foodItems = self.state.foodItems
+        if #foodItems < 5 then
+            table.insert(foodItems, foodItemId)
+            self:setState({foodItems = foodItems})
+        end
+    end)
+end
 
--- function InventoryComponent:render()
---     local itemList = {}
---     for i, item in ipairs(self.state.items) do
---         table.insert(itemList, Roact.createElement("TextLabel", {
---             Text = item.name,
---             Size = UDim2.new(0, 100, 0, 50),
---             Position = UDim2.new(0, 0, 0, i * 50), -- Simple vertical list
---         }))
---     end
+function FoodDisplay:render()
+    local slots = {}
+    for i = 1, 5 do
+        slots["Slot" .. i] = Roact.createElement("Frame", {
+            Size = UDim2.new(0, 50, 0, 50),
+            Position = UDim2.new((i-1) * 0.1, 300, 1, -10), -- Position slots at the bottom
+            BackgroundColor3 = self.state.foodItems[i] and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 255, 255),
+            BorderSizePixel = 2,
+        })
+    end
 
---     return Roact.createElement("Frame", {
---         Size = UDim2.new(0, 100, 0, #self.state.items * 50),
---         -- Additional styling here
---     }, itemList)
--- end
+    return Roact.createElement("Frame", {
+        Size = UDim2.new(1, 0, 0, 50),
+        Position = UDim2.new(0, 0, 1, -50),
+        AnchorPoint = Vector2.new(0, 1),
+        BackgroundTransparency = 1, -- Transparent background
+    }, slots)
+end
+
+local playerGui = game.Players.LocalPlayer:FindFirstChildWhichIsA("PlayerGui")
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = playerGui
+
+local app = Roact.createElement(FoodDisplay)
+Roact.mount(app, screenGui, "FoodDisplay")
