@@ -3,5 +3,8 @@
         "Vector3",
         "game",
         "wait"
+    ],
+    "robloxLsp.diagnostics.globals": [
+        "printPlayerInventory"
     ]
 }
