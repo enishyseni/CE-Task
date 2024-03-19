@@ -1,5 +1,6 @@
 -- Assuming Roact is installed and required in your environment
 local Roact = require(game.ReplicatedStorage.Roact)
+local RunService = game:GetService("RunService")
 
 -- Define the Popup Component
 local PopupComponent = Roact.Component:extend("PopupComponent")
@@ -18,15 +19,15 @@ function PopupComponent:render()
 end
 
 -- Create a ScreenGui for the Roact tree
-local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+local playerGui = game.Players.LocalPlayer:WaitForChild("ScreenGui")
 local app = Roact.createElement(PopupComponent, {visible = false}) -- Start invisible
 local handle = Roact.mount(app, playerGui)
 
 -- Detect proximity to the food item
 local player = game.Players.LocalPlayer
-local foodItem = game.Workspace:WaitForChild("FoodItem") -- Assuming a part named 'FoodItem'
+local foodItem = game.Workspace:WaitForChild("Burger") -- Assuming a part named 'FoodItem'
 
-game.RunService.Heartbeat:Connect(function()
+RunService.Heartbeat:Connect(function()
     local distance = (player.Character.HumanoidRootPart.Position - foodItem.Position).magnitude
     if distance < 10 then -- Change 10 to your desired proximity
         -- Show the popup

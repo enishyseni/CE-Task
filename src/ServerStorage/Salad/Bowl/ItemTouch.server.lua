@@ -20,7 +20,7 @@ function onTouched(hit)
 		HealthUpdateEvent:FireClient(player, shared.playerHealthBarValue)
 
 		-- Remove the item after the sound has been played and other actions have been taken
-		script.Parent:remove()
+		script.Parent.Parent:remove()
 	end
 end
 

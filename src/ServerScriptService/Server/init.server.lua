@@ -1,8 +1,10 @@
 -- print("Hello world, from server!")
 
 -- local foodItem = game.ServerStorage.YourItem                              -- Your item model in ServerStorage
-local foodItem = game.ServerStorage.Burger
-foodItem.PrimaryPart = foodItem:FindFirstChild("MeshPart") -- Replace "NameOfThePart" with the actual name of the part you want to use as the PrimaryPart.
+local foodItemBurger = game.ServerStorage.Burger
+local foodItemSalad = game.ServerStorage.Salad
+foodItemBurger.PrimaryPart = foodItemBurger:FindFirstChild("MeshPart") -- Replace "NameOfThePart" with the actual name of the part you want to use as the PrimaryPart.
+foodItemSalad.PrimaryPart = foodItemSalad:FindFirstChild("Bowl") -- Replace "NameOfThePart" with the actual name of the part you want to use as the PrimaryPart.
 
 function spawnFoodNearPlayer(player)
     if not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then return end
@@ -18,17 +20,36 @@ function spawnFoodNearPlayer(player)
         math.random(-spawnRange, spawnRange)
     )
 
-    local spawnPosition = playerPosition + randomPosition
+	local spawnPosition = playerPosition + randomPosition
+	
+	local foodToSpawn = math.random(1,2)
+	
+	print(foodToSpawn)
 
-    -- Assuming foodItem is your item to spawn and it's a Model with a PrimaryPart
-    local clone = foodItem:Clone()
-    if clone.PrimaryPart then
-        -- Adjust Y position as necessary, e.g., to place it above the ground
-        clone:SetPrimaryPartCFrame(CFrame.new(spawnPosition + Vector3.new(0, 0, 0))) -- Adding 10 to Y to ensure it spawns above the ground
-        clone.Parent = game.Workspace
-    else
-        warn("No PrimaryPart set for " .. clone.Name)
-    end
+	-- Assuming foodItem is your item to spawn and it's a Model with a PrimaryPart
+	if foodToSpawn == 1 then
+		local clone = foodItemBurger:Clone()
+		if clone.PrimaryPart then
+			-- Adjust Y position as necessary, e.g., to place it above the ground
+			clone:SetPrimaryPartCFrame(CFrame.new(spawnPosition + Vector3.new(0, 0, 0))) -- Adding 10 to Y to ensure it spawns above the ground
+			clone.Parent = game.Workspace
+		else
+			warn("No PrimaryPart set for " .. clone.Name)
+		end
+	end
+	
+	if foodToSpawn == 2 then
+		local clone = foodItemSalad:Clone()
+		if clone.PrimaryPart then
+			-- Adjust Y position as necessary, e.g., to place it above the ground
+			clone:SetPrimaryPartCFrame(CFrame.new(spawnPosition + Vector3.new(0, 0, 0))) -- Adding 10 to Y to ensure it spawns above the ground
+			clone.Parent = game.Workspace
+		else
+			warn("No PrimaryPart set for " .. clone.Name)
+		end
+	end
+	
+    
 end
 
 while true do
