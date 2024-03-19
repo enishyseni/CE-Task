@@ -10,7 +10,6 @@ function onTouched(hit)
 
 		-- Play the pickup sound if it exists
 		if pickupSound then
-			print("sound is not null")
 			pickupSound:Play()
 		end
 
@@ -21,6 +20,8 @@ function onTouched(hit)
 
 		-- Remove the item after the sound has been played and other actions have been taken
 		script.Parent.Parent:remove()
+		
+		table.remove(shared.playersItems[player.UserId], 1)
 	end
 end
 
