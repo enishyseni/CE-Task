@@ -15,7 +15,7 @@ function HealthBar:init()
     HealthUpdateEvent.OnClientEvent:Connect(function(newHealth)
         self:setState({
             health = newHealth
-        })
+		})
     end)
 end
 

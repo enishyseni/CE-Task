@@ -1,4 +1,5 @@
 shared.playersItems = {}
+shared.playersScore = {}
 
 -- Your item model in ServerStorage
 local foodItemBurger = game.ServerStorage.Burger
@@ -75,7 +76,7 @@ function spawnFoodNearPlayer(player)
 	if clone.PrimaryPart then
 		print("New item: " .. clone.Name)
 		-- Adjust Y position as necessary, e.g., to place it above the ground
-		clone:SetPrimaryPartCFrame(CFrame.new(spawnPosition + Vector3.new(0, 5, 0))) -- Adding 10 to Y to ensure it spawns above the ground
+		clone:SetPrimaryPartCFrame(CFrame.new(spawnPosition + Vector3.new(0, 1, 0))) -- Adding 10 to Y to ensure it spawns above the ground
 		clone.Parent = game.Workspace
 	else
 		warn("No PrimaryPart set for " .. clone.Name)

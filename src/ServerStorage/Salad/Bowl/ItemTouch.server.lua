@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HealthUpdateEvent = ReplicatedStorage:WaitForChild("HealthUpdateEvent")
 local pickupSound = workspace.PickupSound
+local ScoreTracker = require(game.ServerScriptService.ScoreTracker)
 
 function onTouched(hit)
 	local player = game.Players:findFirstChild(hit.Parent.Name)
@@ -17,6 +18,10 @@ function onTouched(hit)
 
 		-- Update the player's health on the client side
 		HealthUpdateEvent:FireClient(player, shared.playerHealthBarValue)
+		
+		print("Salad -> Touch -> player.userId: " .. player.userId)
+		
+		ScoreTracker.updatePlayerScore(player.userId, 5)
 
 		-- Remove the item after the sound has been played and other actions have been taken
 		script.Parent.Parent:remove()
