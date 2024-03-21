@@ -1,27 +1,30 @@
-shared.playersItems = {}
-shared.playersScore = {}
+shared.playersSpawnedItems = {}
 
 -- Your item model in ServerStorage
 local foodItemBurger = game.ServerStorage.Burger
 local foodItemSalad = game.ServerStorage.Salad
+local foodItemCandy = game.ServerStorage.Candy
+local foodItemSupplement = game.ServerStorage.Supplement
 foodItemBurger.PrimaryPart = foodItemBurger:FindFirstChild("MeshPart") -- Replace "NameOfThePart" with the actual name of the part you want to use as the PrimaryPart.
 foodItemSalad.PrimaryPart = foodItemSalad:FindFirstChild("Bowl") -- Replace "NameOfThePart" with the actual name of the part you want to use as the PrimaryPart.
+foodItemCandy.PrimaryPart = foodItemCandy:FindFirstChild("MeshPart")
+foodItemSupplement.PrimaryPart = foodItemSupplement:FindFirstChild("Body")
 
 -- Function to insert an item for a specific player
 local function insertItemForPlayer(player, itemId)
 	-- Ensure there's a table for this player based on their UserId
-	if not shared.playersItems[player.UserId] then
-		shared.playersItems[player.UserId] = {}
+	if not shared.playersSpawnedItems[player.UserId] then
+		shared.playersSpawnedItems[player.UserId] = {}
 	end
 
 	-- Insert the item into the player's specific item list
-	table.insert(shared.playersItems[player.UserId], itemId)
+	table.insert(shared.playersSpawnedItems[player.UserId], itemId)
 end
 
 local function getNumberOfItemsPerPlayer(player)
 	local itemsCount = 0 -- This will store the number of items per player
 
-	for userId, items in pairs(shared.playersItems) do
+	for userId, items in pairs(shared.playersSpawnedItems) do
 		-- The key is the userId, and the value is the table of items
 		-- Count the number of items for this player and store it in itemCounts
 		if userId == player.userId then
@@ -46,7 +49,7 @@ function spawnFoodNearPlayer(player)
         math.random(-spawnRange, spawnRange)
 	)
 	
-	print("ITMES Count: " .. getNumberOfItemsPerPlayer(player))
+	--print("ITMES Count: " .. getNumberOfItemsPerPlayer(player))
 	--print(shared.playersItems)
 	
 	if getNumberOfItemsPerPlayer(player) == 5 then
@@ -58,9 +61,9 @@ function spawnFoodNearPlayer(player)
 	local spawnPosition = playerPosition + randomPosition
 	
 	-- If you add another type of item you have to increase range
-	local foodTypeToSpawn = math.random(1,2)
+	local foodTypeToSpawn = math.random(1,4)
 	
-	print(foodTypeToSpawn)
+	--print(foodTypeToSpawn)
 
 	-- Assuming foodItem is your item to spawn and it's a Model with a PrimaryPart
 	local clone = nil
@@ -73,8 +76,16 @@ function spawnFoodNearPlayer(player)
 		clone = foodItemSalad:Clone()
 	end
 	
+	if foodTypeToSpawn == 3 then
+		clone = foodItemCandy:Clone()
+	end
+	
+	if foodTypeToSpawn == 4 then
+		clone = foodItemSupplement:Clone()
+	end
+	
 	if clone.PrimaryPart then
-		print("New item: " .. clone.Name)
+		--print("New item: " .. clone.Name)
 		-- Adjust Y position as necessary, e.g., to place it above the ground
 		clone:SetPrimaryPartCFrame(CFrame.new(spawnPosition + Vector3.new(0, 1, 0))) -- Adding 10 to Y to ensure it spawns above the ground
 		clone.Parent = game.Workspace
@@ -86,7 +97,7 @@ function spawnFoodNearPlayer(player)
 end
 
 while true do
-    wait(1) -- Wait for 10 seconds before spawning another item
+    wait(3) -- Wait for 3 seconds before spawning another item
 
     -- Get a list of all players in the game
     local players = game.Players:GetPlayers()

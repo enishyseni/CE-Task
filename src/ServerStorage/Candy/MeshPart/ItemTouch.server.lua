@@ -19,13 +19,13 @@ function onTouched(hit)
 
 		-- Update the player's health on the client side
 		--HealthUpdateEvent:FireClient(player, shared.playerHealthBarValue)
-		InventoryManager.AddItem(player, InventoryManager.ItemTypes.Burger, 1)
-		
+		InventoryManager.AddItem(player, InventoryManager.ItemTypes.Candy, 1)
+
 		ScoreTracker.updatePlayerScore(player.userId, 5)
 
 		-- Remove the item after the sound has been played and other actions have been taken
 		script.Parent:remove()
-		
+
 		table.remove(shared.playersSpawnedItems[player.UserId], 1)
 	end
 end

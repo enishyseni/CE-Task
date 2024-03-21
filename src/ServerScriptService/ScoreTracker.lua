@@ -11,8 +11,8 @@ function ScoreTracker.updatePlayerScore(userId, amount)
 	-- Find player by UserId
 	local player = game.Players:GetPlayerByUserId(userId)
 	if player then
-		print("--ScoreUpdated FireClient--")
-		print(newScore)
+		--print("--ScoreUpdated FireClient--")
+		--print(newScore)
 		ScoreUpdatedEvent:FireClient(player, newScore)  -- Notify the player of their new score
 	end
 end

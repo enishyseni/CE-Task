@@ -2,6 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HealthUpdateEvent = ReplicatedStorage:WaitForChild("HealthUpdateEvent")
 local pickupSound = workspace.PickupSound
 local ScoreTracker = require(game.ServerScriptService.ScoreTracker)
+local InventoryManager = require(game.ServerScriptService.InventoryManager)
 
 function onTouched(hit)
 	local player = game.Players:findFirstChild(hit.Parent.Name)
@@ -14,10 +15,12 @@ function onTouched(hit)
 			pickupSound:Play()
 		end
 
-		shared.playerHealthBarValue = math.max(0, shared.playerHealthBarValue + 10) -- Update health, you might need to adjust this part based on actual logic
+		-- shared.playerHealthBarValue = math.max(0, shared.playerHealthBarValue + 10) -- Update health, you might need to adjust this part based on actual logic
 
 		-- Update the player's health on the client side
-		HealthUpdateEvent:FireClient(player, shared.playerHealthBarValue)
+		--HealthUpdateEvent:FireClient(player, shared.playerHealthBarValue)
+		
+		InventoryManager.AddItem(player, InventoryManager.ItemTypes.Salad, 1)
 		
 		print("Salad -> Touch -> player.userId: " .. player.userId)
 		
@@ -26,7 +29,7 @@ function onTouched(hit)
 		-- Remove the item after the sound has been played and other actions have been taken
 		script.Parent.Parent:remove()
 		
-		table.remove(shared.playersItems[player.UserId], 1)
+		table.remove(shared.playersSpawnedItems[player.UserId], 1)
 	end
 end
 
